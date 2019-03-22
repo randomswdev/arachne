@@ -39,12 +39,12 @@ import (
 	"github.com/uber/arachne/metrics"
 
 	"github.com/google/gopacket/layers"
-	"github.com/jawher/mow.cli"
+	cli "github.com/jawher/mow.cli"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"gopkg.in/validator.v2"
-	"gopkg.in/yaml.v2"
+	validator "gopkg.in/validator.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 const defaultConfigFile = "/etc/arachne/arachne.yaml"
@@ -154,12 +154,17 @@ type pollInterval struct {
 	Failure time.Duration
 }
 
-// Global holds the global application info.
-type Global struct {
-	App          *AppConfig
-	CLI          *CLIConfig
+// Engine helds the configuration for the polling engine.
+type Engine struct {
 	RemoteConfig *RemoteConfig
 	Remotes      RemoteStore
+}
+
+// Global holds the global application info.
+type Global struct {
+	Engine
+	App *AppConfig
+	CLI *CLIConfig
 }
 
 func localFileReadable(path string) error {
@@ -280,7 +285,7 @@ func FetchRemoteList(
 	minBatchInterval time.Duration,
 	HTTPResponseHeaderTimeout time.Duration,
 	orchestratorRESTConf string,
-	kill chan struct{},
+	kill <-chan struct{},
 	logger *log.Logger,
 ) error {
 
@@ -359,7 +364,7 @@ func refreshRemoteList(
 	minBatchInterval time.Duration,
 	HTTPResponseHeaderTimeout time.Duration,
 	orchestratorRESTConf string,
-	kill chan struct{},
+	kill <-chan struct{},
 	logger *log.Logger,
 ) error {
 

@@ -160,7 +160,7 @@ func (rs resultStore) walkResults(
 
 // processResults calculates metrics, uploads stats and stores in results[] for stdout, if needed.
 func (rs resultStore) processResults(
-	gl *config.Global,
+	gl *config.Engine,
 	remotes config.RemoteStore,
 	target string,
 	req tcp.Message,
@@ -195,7 +195,7 @@ func (rs resultStore) processResults(
 }
 
 func (rs resultStore) printResults(
-	gl *config.Global,
+	gl *config.Engine,
 	remotes config.RemoteStore,
 	currentDSCP *ip.DSCPValue,
 	logger *log.Logger,
@@ -209,7 +209,7 @@ func (rs resultStore) printResults(
 
 // Run processes the echoes sent and received to compute and report all the metrics desired.
 func Run(
-	gl *config.Global,
+	gl *config.Engine,
 	sentC chan tcp.Message,
 	rcvdC chan tcp.Message,
 	remotes config.RemoteStore,
@@ -243,7 +243,7 @@ func Run(
 }
 
 func batchWorker(
-	gl *config.Global,
+	gl *config.Engine,
 	sentC chan tcp.Message,
 	rcvdC chan tcp.Message,
 	remotes config.RemoteStore,
@@ -440,7 +440,7 @@ func zeroOutResults(
 	}
 }
 
-func printTableHeader(gl *config.Global, currentDSCP string, logger *log.Logger) {
+func printTableHeader(gl *config.Engine, currentDSCP string, logger *log.Logger) {
 	color.Set(color.FgHiYellow, color.Bold)
 	defer color.Unset()
 
